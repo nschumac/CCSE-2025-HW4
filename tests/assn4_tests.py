@@ -6,7 +6,7 @@ BASE_URL_STORE_2 = "http://localhost:5002"
 BASE_URL_ORDER = "http://localhost:5003"
 
 # Pet Types
-PET_TYPE1 = {"type": "GoldenRetriever"}
+PET_TYPE1 = {"type": "Golden Retriever"}
 PET_TYPE1_VAL = {
     "type": "Golden Retriever",
     "family": "Canidae",
@@ -15,7 +15,7 @@ PET_TYPE1_VAL = {
     "lifespan": 12
 }
 
-PET_TYPE2 = {"type": "AustralianShepherd"}
+PET_TYPE2 = {"type": "Australian Shepherd"}
 PET_TYPE2_VAL = {
     "type": "Australian Shepherd",
     "family": "Canidae",
