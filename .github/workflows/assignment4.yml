@@ -137,6 +137,7 @@ jobs:
             -p 5001:5001 \
             -e MONGODB_URI=mongodb://mongo-shared:27017/ \
             -e PORT=5001 \
+            -e STORE_ID=1 \
             -e NINJA_API_KEY=${{ secrets.NINJA_API_KEY }} \
             pet-store:latest; then
             echo "success=true" >> $GITHUB_OUTPUT
@@ -152,6 +153,7 @@ jobs:
             -p 5002:5002 \
             -e MONGODB_URI=mongodb://mongo-shared:27017/ \
             -e PORT=5002 \
+            -e STORE_ID=2 \
             -e NINJA_API_KEY=${{ secrets.NINJA_API_KEY }} \
             pet-store:latest; then
             echo "success=true" >> $GITHUB_OUTPUT
@@ -286,11 +288,13 @@ jobs:
           docker run -d --name pet-store1 --network petstore_net -p 5001:5001 \
             -e MONGODB_URI=mongodb://mongo-shared:27017/ \
             -e PORT=5001 \
+            -e STORE_ID=1 \
             -e NINJA_API_KEY=${{ secrets.NINJA_API_KEY }} \
             pet-store:latest
           docker run -d --name pet-store2 --network petstore_net -p 5002:5002 \
             -e MONGODB_URI=mongodb://mongo-shared:27017/ \
             -e PORT=5002 \
+            -e STORE_ID=2 \
             -e NINJA_API_KEY=${{ secrets.NINJA_API_KEY }} \
             pet-store:latest
           docker run -d --name pet-order --network petstore_net -p 5003:5003 \
