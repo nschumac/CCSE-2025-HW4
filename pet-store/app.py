@@ -16,7 +16,7 @@ ERROR_404 = ({"error": "Not found"}, 404)
 ERROR_415_JSON = ({"error": "Expected application/json media type"}, 415)
 
 # External API Configuration
-NINJA_API_KEY = os.environ.get("NINJA_API_KEY", "ahOqiuJCApa117bE961tGQ==cGu4SfUgfPsZ4DgH")
+NINJA_API_KEY = "ahOqiuJCApa117bE961tGQ==cGu4SfUgfPsZ4DgH"
 NINJA_API_BASE_URL = "https://api.api-ninjas.com/v1/animals"
 API_TIMEOUT_SECONDS = 5
 
