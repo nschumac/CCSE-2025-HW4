@@ -61,8 +61,20 @@ def _find_pet_type_by_id(pet_type_id: int) -> Optional[Dict[str, Any]]:
 
 
 def _pet_type_exists_by_name(type_name: str) -> bool:
-    """Check if a pet type exists by name (case-insensitive)."""
-    return pet_types_collection.find_one({"type_lower": type_name.lower()}) is not None
+    """Check if a pet type exists by name (case-insensitive).
+    
+    Also checks the spaced version to handle camelCase inputs like 'GoldenRetriever'.
+    """
+    # Check both the raw name and the spaced version (for camelCase handling)
+    raw_lower = type_name.lower()
+    spaced_lower = _camel_to_spaced(type_name).lower()
+    
+    return pet_types_collection.find_one({
+        "$or": [
+            {"type_lower": raw_lower},
+            {"type_lower": spaced_lower}
+        ]
+    }) is not None
 
 
 def _validate_json_request() -> Tuple[Optional[Dict[str, Any]], Optional[Tuple[Dict, int]]]:
@@ -97,9 +109,17 @@ def _get_image_mimetype(filename: str) -> str:
     return "image/jpeg"
 
 
+def _camel_to_spaced(name: str) -> str:
+    """Transform camelCase to 'Spaced Case' (e.g., 'GoldenRetriever' → 'Golden Retriever')."""
+    return re.sub(r'([A-Z])', r' \1', name).strip()
+
+
 def query_ninja_api(animal_name: str) -> requests.Response:
+    # Transform camelCase to "Spaced Case" for API (e.g., "GoldenRetriever" → "Golden Retriever")
+    spaced_name = _camel_to_spaced(animal_name)
+    
     return requests.get(
-        f"{NINJA_API_BASE_URL}?name={animal_name}",
+        f"{NINJA_API_BASE_URL}?name={spaced_name}",
         headers={"X-Api-Key": NINJA_API_KEY},
         timeout=API_TIMEOUT_SECONDS,
     )
@@ -111,15 +131,24 @@ def create_ninja_api_error_response(response: requests.Response) -> Tuple[Dict[s
 
 def extract_pet_type_from_api_response(original_name: str, api_data: Any) -> Optional[Dict[str, Any]]:
     # API sometimes returns a list of candidates; pick exact name match if present
+    # Also try the spaced version of camelCase names (e.g., "GoldenRetriever" -> "Golden Retriever")
+    spaced_original = _camel_to_spaced(original_name).lower()
+    original_lower = original_name.lower()
+    
     if isinstance(api_data, list):
         for item in api_data:
-            if item.get("name", "").lower() == original_name.lower():
+            item_name_lower = item.get("name", "").lower()
+            # Match either the original or the spaced version
+            if item_name_lower == original_lower or item_name_lower == spaced_original:
                 api_data = item
                 break
 
     if isinstance(api_data, list):
-        # No exact match found
-        return None
+        # No exact match found - try first item if list is non-empty
+        if len(api_data) > 0:
+            api_data = api_data[0]
+        else:
+            return None
 
     taxonomy = api_data.get("taxonomy") or {}
     characteristics = api_data.get("characteristics") or {}
@@ -302,7 +331,8 @@ def create_pet_type():
             return ERROR_400
         return create_ninja_api_error_response(api_response)
 
-    pet_type_data = extract_pet_type_from_api_response(str(pet_type), api_response.json())
+    api_json = api_response.json()
+    pet_type_data = extract_pet_type_from_api_response(str(pet_type), api_json)
     if pet_type_data is None:
         return ERROR_400
 
