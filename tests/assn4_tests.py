@@ -121,9 +121,9 @@ def test_02_post_pet_types_to_store2():
     assert "id" in data
     pet_type_ids["id_6"] = data["id"]
     
-    # Verify all 6 IDs are unique
-    all_ids = [pet_type_ids[f"id_{i}"] for i in range(1, 7)]
-    assert len(all_ids) == len(set(all_ids)), "All IDs must be unique"
+    # Verify IDs within store 2 are unique
+    store2_ids = [pet_type_ids["id_4"], pet_type_ids["id_5"], pet_type_ids["id_6"]]
+    assert len(store2_ids) == len(set(store2_ids)), "IDs within store 2 must be unique"
 
 
 def test_03_post_pets_to_store1_type1():

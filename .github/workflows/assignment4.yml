@@ -233,7 +233,6 @@ jobs:
       
       - name: Run pytest
         id: pytest
-        continue-on-error: true
         run: |
           pytest -v tests/assn4_tests.py > assn4_test_results.txt 2>&1
           exit_code=$?
@@ -306,18 +305,44 @@ jobs:
           sleep 5
       
       - name: Setup data
+        id: setup-data
+        continue-on-error: true
         run: |
-          python3 scripts/setup_data.py
+          python3 scripts/setup_data.py > setup_data.log 2>&1
+          exit_code=$?
+          echo "exit_code=$exit_code" >> $GITHUB_OUTPUT
+          exit $exit_code
       
       - name: Process queries
+        id: process-queries
+        continue-on-error: true
         run: |
-          python3 scripts/query_processor.py query.txt response.txt
+          python3 scripts/query_processor.py query.txt response.txt > query_processor.log 2>&1
+          exit_code=$?
+          echo "exit_code=$exit_code" >> $GITHUB_OUTPUT
+          exit $exit_code
       
-      - name: Upload response
+      - name: Upload query results and logs
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: query-results
-          path: response.txt
+          path: |
+            response.txt
+            setup_data.log
+            query_processor.log
+      
+      - name: Check query job success
+        if: always()
+        run: |
+          if [ "${{ steps.setup-data.outputs.exit_code }}" != "0" ]; then
+            echo "Setup data failed"
+            exit 1
+          fi
+          if [ "${{ steps.process-queries.outputs.exit_code }}" != "0" ]; then
+            echo "Query processing failed"
+            exit 1
+          fi
       
       - name: Cleanup
         if: always()
