@@ -7,8 +7,8 @@ BASE_URL_STORE_1 = "http://localhost:5001"
 BASE_URL_STORE_2 = "http://localhost:5002"
 
 # Pet Types
-PET_TYPE1 = {"type": "GoldenRetriever"}
-PET_TYPE2 = {"type": "AustralianShepherd"}
+PET_TYPE1 = {"type": "Golden Retriever"}
+PET_TYPE2 = {"type": "Australian Shepherd"}
 PET_TYPE3 = {"type": "Abyssinian"}
 PET_TYPE4 = {"type": "bulldog"}
 

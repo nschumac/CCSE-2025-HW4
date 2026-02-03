@@ -110,7 +110,12 @@ def _get_image_mimetype(filename: str) -> str:
 
 
 def _camel_to_spaced(name: str) -> str:
-    """Transform camelCase to 'Spaced Case' (e.g., 'GoldenRetriever' → 'Golden Retriever')."""
+    """Transform camelCase to 'Spaced Case' (e.g., 'GoldenRetriever' → 'Golden Retriever').
+    
+    If the name already contains spaces, return it as-is.
+    """
+    if ' ' in name:
+        return name
     return re.sub(r'([A-Z])', r' \1', name).strip()
 
 
@@ -130,16 +135,13 @@ def create_ninja_api_error_response(response: requests.Response) -> Tuple[Dict[s
 
 
 def extract_pet_type_from_api_response(original_name: str, api_data: Any) -> Optional[Dict[str, Any]]:
-    # API sometimes returns a list of candidates; pick exact name match if present
-    # Also try the spaced version of camelCase names (e.g., "GoldenRetriever" -> "Golden Retriever")
-    spaced_original = _camel_to_spaced(original_name).lower()
     original_lower = original_name.lower()
     
     if isinstance(api_data, list):
         for item in api_data:
             item_name_lower = item.get("name", "").lower()
             # Match either the original or the spaced version
-            if item_name_lower == original_lower or item_name_lower == spaced_original:
+            if item_name_lower == original_lower:
                 api_data = item
                 break
 
