@@ -1,0 +1,110 @@
+version: '3.8'
+
+services:
+  mongo-shared:
+    image: mongo:latest
+    container_name: mongo-shared
+    networks:
+      - petstore_network
+    volumes:
+      - mongo_shared_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: petstore_shared
+    expose:
+      - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --eval 'db.runCommand({ ping: 1 })' --quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  mongo-order:
+    image: mongo:latest
+    container_name: mongo-order
+    networks:
+      - petstore_network
+    volumes:
+      - mongo_order_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: pet_order_db
+    expose:
+      - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --eval 'db.runCommand({ ping: 1 })' --quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  pet-store1:
+    build: ./pet-store
+    container_name: pet-store1
+    networks:
+      - petstore_network
+    depends_on:
+      mongo-shared:
+        condition: service_healthy
+    environment:
+      MONGODB_URI: "mongodb://mongo-shared:27017/"
+      STORE_ID: "1"
+      PORT: "5001"
+      NINJA_API_KEY: "${NINJA_API_KEY}"
+    ports:
+      - "5001:5001"
+    expose:
+      - "5001"
+    volumes:
+      - pet_pictures_1:/app/pictures
+
+  pet-store2:
+    build: ./pet-store
+    container_name: pet-store2
+    networks:
+      - petstore_network
+    depends_on:
+      mongo-shared:
+        condition: service_healthy
+    environment:
+      MONGODB_URI: "mongodb://mongo-shared:27017/"
+      STORE_ID: "2"
+      PORT: "5002"
+      NINJA_API_KEY: "${NINJA_API_KEY}"
+    ports:
+      - "5002:5002"
+    expose:
+      - "5002"
+    volumes:
+      - pet_pictures_2:/app/pictures
+
+  pet-order:
+    build: ./pet-order
+    container_name: pet-order
+    networks:
+      - petstore_network
+    depends_on:
+      mongo-order:
+        condition: service_healthy
+      pet-store1:
+        condition: service_started
+      pet-store2:
+        condition: service_started
+    environment:
+      MONGODB_URI: "mongodb://mongo-order:27017/"
+      PORT: "5003"
+      PET_STORE_1_URL: "http://pet-store1:5001"
+      PET_STORE_2_URL: "http://pet-store2:5002"
+    ports:
+      - "5003:5003"
+    expose:
+      - "5003"
+
+networks:
+  petstore_network:
+    driver: bridge
+
+volumes:
+  mongo_shared_data:
+  mongo_order_data:
+  pet_pictures_1:
+  pet_pictures_2:

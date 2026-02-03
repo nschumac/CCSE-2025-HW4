@@ -1,0 +1,3 @@
+query: 1,family=Canidae;
+query: 2,type=bulldog;
+purchase: {"purchaser":"John","pet-type":"Golden Retriever","store":1,"pet-name":"Lander","purchase-id":"p1"};

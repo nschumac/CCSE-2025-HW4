@@ -1,0 +1,19 @@
+# Environment files
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Generated artifacts
+response.txt
+log.txt
+assn4_test_results.txt
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
