@@ -20,7 +20,7 @@ PET_TYPE2_VAL = {
     "type": "Australian Shepherd",
     "family": "Canidae",
     "genus": "Canis",
-    "attributes": ["Loyal", "outgoing", "and", "friendly"],
+    "attributes": ["Loyal", "outgoing", "and friendly"],
     "lifespan": 15
 }
 
@@ -29,7 +29,7 @@ PET_TYPE3_VAL = {
     "type": "Abyssinian",
     "family": "Felidae",
     "genus": "Felis",
-    "attributes": ["Intelligent", "and", "curious"],
+    "attributes": ["Intelligent", "and curious"],
     "lifespan": 13
 }
 
@@ -38,7 +38,7 @@ PET_TYPE4_VAL = {
     "type": "bulldog",
     "family": "Canidae",
     "genus": "Canis",
-    "attributes": ["Gentle", "calm", "and", "affectionate"],
+    "attributes": ["Gentle", "calm", "and affectionate"],
     "lifespan": None
 }
 
