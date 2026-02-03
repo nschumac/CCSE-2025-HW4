@@ -44,6 +44,7 @@ services:
       mongo-shared:
         condition: service_healthy
     environment:
+      PYTHONUNBUFFERED: 0
       MONGODB_URI: "mongodb://mongo-shared:27017/"
       STORE_ID: "1"
       PORT: "5001"
@@ -64,6 +65,7 @@ services:
       mongo-shared:
         condition: service_healthy
     environment:
+      PYTHONUNBUFFERED: 0
       MONGODB_URI: "mongodb://mongo-shared:27017/"
       STORE_ID: "2"
       PORT: "5002"
@@ -88,6 +90,7 @@ services:
       pet-store2:
         condition: service_started
     environment:
+      PYTHONUNBUFFERED: 0
       MONGODB_URI: "mongodb://mongo-order:27017/"
       PORT: "5003"
       PET_STORE_1_URL: "http://pet-store1:5001"
