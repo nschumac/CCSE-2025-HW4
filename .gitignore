@@ -17,3 +17,5 @@ assn4_test_results.txt
 
 # OS files
 .DS_Store
+
+.venv
