@@ -208,8 +208,8 @@ def test_09_get_pets_for_type():
     id_6 = pet_type_ids["id_6"]
     
     response = requests.get(f"{BASE_URL_STORE_2}/pet-types/{id_6}/pets")
-    # assert response.status_code == 200
-    assert response.status_code == 404
+    assert response.status_code == 200
+    # assert response.status_code == 404
     
     data = response.json()
     assert isinstance(data, list)
