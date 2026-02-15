@@ -1,231 +1,231 @@
-import requests
-import pytest
+# import requests
+# import pytest
 
-BASE_URL_STORE_1 = "http://localhost:5001"
-BASE_URL_STORE_2 = "http://localhost:5002"
-BASE_URL_ORDER = "http://localhost:5003"
+# BASE_URL_STORE_1 = "http://localhost:5001"
+# BASE_URL_STORE_2 = "http://localhost:5002"
+# BASE_URL_ORDER = "http://localhost:5003"
 
-# Pet Types
-PET_TYPE1 = {"type": "Golden Retriever"}
-PET_TYPE1_VAL = {
-    "type": "Golden Retriever",
-    "family": "Canidae",
-    "genus": "Canis",
-    "attributes": [],
-    "lifespan": 12
-}
+# # Pet Types
+# PET_TYPE1 = {"type": "Golden Retriever"}
+# PET_TYPE1_VAL = {
+#     "type": "Golden Retriever",
+#     "family": "Canidae",
+#     "genus": "Canis",
+#     "attributes": [],
+#     "lifespan": 12
+# }
 
-PET_TYPE2 = {"type": "Australian Shepherd"}
-PET_TYPE2_VAL = {
-    "type": "Australian Shepherd",
-    "family": "Canidae",
-    "genus": "Canis",
-    "attributes": ["Loyal", "outgoing", "and friendly"],
-    "lifespan": 15
-}
+# PET_TYPE2 = {"type": "Australian Shepherd"}
+# PET_TYPE2_VAL = {
+#     "type": "Australian Shepherd",
+#     "family": "Canidae",
+#     "genus": "Canis",
+#     "attributes": ["Loyal", "outgoing", "and friendly"],
+#     "lifespan": 15
+# }
 
-PET_TYPE3 = {"type": "Abyssinian"}
-PET_TYPE3_VAL = {
-    "type": "Abyssinian",
-    "family": "Felidae",
-    "genus": "Felis",
-    "attributes": ["Intelligent", "and curious"],
-    "lifespan": 13
-}
+# PET_TYPE3 = {"type": "Abyssinian"}
+# PET_TYPE3_VAL = {
+#     "type": "Abyssinian",
+#     "family": "Felidae",
+#     "genus": "Felis",
+#     "attributes": ["Intelligent", "and curious"],
+#     "lifespan": 13
+# }
 
-PET_TYPE4 = {"type": "bulldog"}
-PET_TYPE4_VAL = {
-    "type": "bulldog",
-    "family": "Canidae",
-    "genus": "Canis",
-    "attributes": ["Gentle", "calm", "and affectionate"],
-    "lifespan": None
-}
+# PET_TYPE4 = {"type": "bulldog"}
+# PET_TYPE4_VAL = {
+#     "type": "bulldog",
+#     "family": "Canidae",
+#     "genus": "Canis",
+#     "attributes": ["Gentle", "calm", "and affectionate"],
+#     "lifespan": None
+# }
 
-# Pets
-PET1_TYPE1 = {"name": "Lander", "birthdate": "14-05-2020"}
-PET2_TYPE1 = {"name": "Lanky"}
-PET3_TYPE1 = {"name": "Shelly", "birthdate": "07-07-2019"}
-PET4_TYPE2 = {"name": "Felicity", "birthdate": "27-11-2011"}
-PET5_TYPE3 = {"name": "Muscles"}
-PET6_TYPE3 = {"name": "Junior"}
-PET7_TYPE4 = {"name": "Lazy", "birthdate": "07-08-2018"}
-PET8_TYPE4 = {"name": "Lemon", "birthdate": "27-03-2020"}
+# # Pets
+# PET1_TYPE1 = {"name": "Lander", "birthdate": "14-05-2020"}
+# PET2_TYPE1 = {"name": "Lanky"}
+# PET3_TYPE1 = {"name": "Shelly", "birthdate": "07-07-2019"}
+# PET4_TYPE2 = {"name": "Felicity", "birthdate": "27-11-2011"}
+# PET5_TYPE3 = {"name": "Muscles"}
+# PET6_TYPE3 = {"name": "Junior"}
+# PET7_TYPE4 = {"name": "Lazy", "birthdate": "07-08-2018"}
+# PET8_TYPE4 = {"name": "Lemon", "birthdate": "27-03-2020"}
 
-# Global dictionary to store IDs between tests
-pet_type_ids = {}
-
-
-def test_01_post_pet_types_to_store1():
-    """Test posting PET_TYPE1, PET_TYPE2, PET_TYPE3 to pet-store #1"""
-    
-    # POST PET_TYPE1
-    response = requests.post(f"{BASE_URL_STORE_1}/pet-types", json=PET_TYPE1)
-    assert response.status_code == 201
-    data = response.json()
-    assert data["family"] == PET_TYPE1_VAL["family"]
-    assert data["genus"] == PET_TYPE1_VAL["genus"]
-    assert "id" in data
-    pet_type_ids["id_1"] = data["id"]
-    
-    # POST PET_TYPE2
-    response = requests.post(f"{BASE_URL_STORE_1}/pet-types", json=PET_TYPE2)
-    assert response.status_code == 201
-    data = response.json()
-    assert data["family"] == PET_TYPE2_VAL["family"]
-    assert data["genus"] == PET_TYPE2_VAL["genus"]
-    assert "id" in data
-    pet_type_ids["id_2"] = data["id"]
-    
-    # POST PET_TYPE3
-    response = requests.post(f"{BASE_URL_STORE_1}/pet-types", json=PET_TYPE3)
-    assert response.status_code == 201
-    data = response.json()
-    assert data["family"] == PET_TYPE3_VAL["family"]
-    assert data["genus"] == PET_TYPE3_VAL["genus"]
-    assert "id" in data
-    pet_type_ids["id_3"] = data["id"]
-    
-    # Verify all IDs are unique
-    ids = [pet_type_ids["id_1"], pet_type_ids["id_2"], pet_type_ids["id_3"]]
-    assert len(ids) == len(set(ids)), "IDs must be unique"
+# # Global dictionary to store IDs between tests
+# pet_type_ids = {}
 
 
-def test_02_post_pet_types_to_store2():
-    """Test posting PET_TYPE1, PET_TYPE2, PET_TYPE4 to pet-store #2"""
+# def test_01_post_pet_types_to_store1():
+#     """Test posting PET_TYPE1, PET_TYPE2, PET_TYPE3 to pet-store #1"""
     
-    # POST PET_TYPE1
-    response = requests.post(f"{BASE_URL_STORE_2}/pet-types", json=PET_TYPE1)
-    assert response.status_code == 201
-    data = response.json()
-    assert data["family"] == PET_TYPE1_VAL["family"]
-    assert data["genus"] == PET_TYPE1_VAL["genus"]
-    assert "id" in data
-    pet_type_ids["id_4"] = data["id"]
+#     # POST PET_TYPE1
+#     response = requests.post(f"{BASE_URL_STORE_1}/pet-types", json=PET_TYPE1)
+#     assert response.status_code == 201
+#     data = response.json()
+#     assert data["family"] == PET_TYPE1_VAL["family"]
+#     assert data["genus"] == PET_TYPE1_VAL["genus"]
+#     assert "id" in data
+#     pet_type_ids["id_1"] = data["id"]
     
-    # POST PET_TYPE2
-    response = requests.post(f"{BASE_URL_STORE_2}/pet-types", json=PET_TYPE2)
-    assert response.status_code == 201
-    data = response.json()
-    assert data["family"] == PET_TYPE2_VAL["family"]
-    assert data["genus"] == PET_TYPE2_VAL["genus"]
-    assert "id" in data
-    pet_type_ids["id_5"] = data["id"]
+#     # POST PET_TYPE2
+#     response = requests.post(f"{BASE_URL_STORE_1}/pet-types", json=PET_TYPE2)
+#     assert response.status_code == 201
+#     data = response.json()
+#     assert data["family"] == PET_TYPE2_VAL["family"]
+#     assert data["genus"] == PET_TYPE2_VAL["genus"]
+#     assert "id" in data
+#     pet_type_ids["id_2"] = data["id"]
     
-    # POST PET_TYPE4
-    response = requests.post(f"{BASE_URL_STORE_2}/pet-types", json=PET_TYPE4)
-    assert response.status_code == 201
-    data = response.json()
-    assert data["family"] == PET_TYPE4_VAL["family"]
-    assert data["genus"] == PET_TYPE4_VAL["genus"]
-    assert "id" in data
-    pet_type_ids["id_6"] = data["id"]
+#     # POST PET_TYPE3
+#     response = requests.post(f"{BASE_URL_STORE_1}/pet-types", json=PET_TYPE3)
+#     assert response.status_code == 201
+#     data = response.json()
+#     assert data["family"] == PET_TYPE3_VAL["family"]
+#     assert data["genus"] == PET_TYPE3_VAL["genus"]
+#     assert "id" in data
+#     pet_type_ids["id_3"] = data["id"]
     
-    # Verify IDs within store 2 are unique
-    store2_ids = [pet_type_ids["id_4"], pet_type_ids["id_5"], pet_type_ids["id_6"]]
-    assert len(store2_ids) == len(set(store2_ids)), "IDs within store 2 must be unique"
+#     # Verify all IDs are unique
+#     ids = [pet_type_ids["id_1"], pet_type_ids["id_2"], pet_type_ids["id_3"]]
+#     assert len(ids) == len(set(ids)), "IDs must be unique"
 
 
-def test_03_post_pets_to_store1_type1():
-    """Test posting PET1_TYPE1 and PET2_TYPE1 to pet-store #1"""
+# def test_02_post_pet_types_to_store2():
+#     """Test posting PET_TYPE1, PET_TYPE2, PET_TYPE4 to pet-store #2"""
     
-    id_1 = pet_type_ids["id_1"]
+#     # POST PET_TYPE1
+#     response = requests.post(f"{BASE_URL_STORE_2}/pet-types", json=PET_TYPE1)
+#     assert response.status_code == 201
+#     data = response.json()
+#     assert data["family"] == PET_TYPE1_VAL["family"]
+#     assert data["genus"] == PET_TYPE1_VAL["genus"]
+#     assert "id" in data
+#     pet_type_ids["id_4"] = data["id"]
     
-    # POST PET1_TYPE1
-    response = requests.post(f"{BASE_URL_STORE_1}/pet-types/{id_1}/pets", json=PET1_TYPE1)
-    assert response.status_code == 201
+#     # POST PET_TYPE2
+#     response = requests.post(f"{BASE_URL_STORE_2}/pet-types", json=PET_TYPE2)
+#     assert response.status_code == 201
+#     data = response.json()
+#     assert data["family"] == PET_TYPE2_VAL["family"]
+#     assert data["genus"] == PET_TYPE2_VAL["genus"]
+#     assert "id" in data
+#     pet_type_ids["id_5"] = data["id"]
     
-    # POST PET2_TYPE1
-    response = requests.post(f"{BASE_URL_STORE_1}/pet-types/{id_1}/pets", json=PET2_TYPE1)
-    assert response.status_code == 201
+#     # POST PET_TYPE4
+#     response = requests.post(f"{BASE_URL_STORE_2}/pet-types", json=PET_TYPE4)
+#     assert response.status_code == 201
+#     data = response.json()
+#     assert data["family"] == PET_TYPE4_VAL["family"]
+#     assert data["genus"] == PET_TYPE4_VAL["genus"]
+#     assert "id" in data
+#     pet_type_ids["id_6"] = data["id"]
+    
+#     # Verify IDs within store 2 are unique
+#     store2_ids = [pet_type_ids["id_4"], pet_type_ids["id_5"], pet_type_ids["id_6"]]
+#     assert len(store2_ids) == len(set(store2_ids)), "IDs within store 2 must be unique"
 
 
-def test_04_post_pets_to_store1_type3():
-    """Test posting PET5_TYPE3 and PET6_TYPE3 to pet-store #1"""
+# def test_03_post_pets_to_store1_type1():
+#     """Test posting PET1_TYPE1 and PET2_TYPE1 to pet-store #1"""
     
-    id_3 = pet_type_ids["id_3"]
+#     id_1 = pet_type_ids["id_1"]
     
-    # POST PET5_TYPE3
-    response = requests.post(f"{BASE_URL_STORE_1}/pet-types/{id_3}/pets", json=PET5_TYPE3)
-    assert response.status_code == 201
+#     # POST PET1_TYPE1
+#     response = requests.post(f"{BASE_URL_STORE_1}/pet-types/{id_1}/pets", json=PET1_TYPE1)
+#     assert response.status_code == 201
     
-    # POST PET6_TYPE3
-    response = requests.post(f"{BASE_URL_STORE_1}/pet-types/{id_3}/pets", json=PET6_TYPE3)
-    assert response.status_code == 201
+#     # POST PET2_TYPE1
+#     response = requests.post(f"{BASE_URL_STORE_1}/pet-types/{id_1}/pets", json=PET2_TYPE1)
+#     assert response.status_code == 201
 
 
-def test_05_post_pet_to_store2_type1():
-    """Test posting PET3_TYPE1 to pet-store #2"""
+# def test_04_post_pets_to_store1_type3():
+#     """Test posting PET5_TYPE3 and PET6_TYPE3 to pet-store #1"""
     
-    id_4 = pet_type_ids["id_4"]
+#     id_3 = pet_type_ids["id_3"]
     
-    response = requests.post(f"{BASE_URL_STORE_2}/pet-types/{id_4}/pets", json=PET3_TYPE1)
-    assert response.status_code == 201
+#     # POST PET5_TYPE3
+#     response = requests.post(f"{BASE_URL_STORE_1}/pet-types/{id_3}/pets", json=PET5_TYPE3)
+#     assert response.status_code == 201
+    
+#     # POST PET6_TYPE3
+#     response = requests.post(f"{BASE_URL_STORE_1}/pet-types/{id_3}/pets", json=PET6_TYPE3)
+#     assert response.status_code == 201
 
 
-def test_06_post_pet_to_store2_type2():
-    """Test posting PET4_TYPE2 to pet-store #2"""
+# def test_05_post_pet_to_store2_type1():
+#     """Test posting PET3_TYPE1 to pet-store #2"""
     
-    id_5 = pet_type_ids["id_5"]
+#     id_4 = pet_type_ids["id_4"]
     
-    response = requests.post(f"{BASE_URL_STORE_2}/pet-types/{id_5}/pets", json=PET4_TYPE2)
-    assert response.status_code == 201
+#     response = requests.post(f"{BASE_URL_STORE_2}/pet-types/{id_4}/pets", json=PET3_TYPE1)
+#     assert response.status_code == 201
 
 
-def test_07_post_pets_to_store2_type4():
-    """Test posting PET7_TYPE4 and PET8_TYPE4 to pet-store #2"""
+# def test_06_post_pet_to_store2_type2():
+#     """Test posting PET4_TYPE2 to pet-store #2"""
     
-    id_6 = pet_type_ids["id_6"]
+#     id_5 = pet_type_ids["id_5"]
     
-    # POST PET7_TYPE4
-    response = requests.post(f"{BASE_URL_STORE_2}/pet-types/{id_6}/pets", json=PET7_TYPE4)
-    assert response.status_code == 201
-    
-    # POST PET8_TYPE4
-    response = requests.post(f"{BASE_URL_STORE_2}/pet-types/{id_6}/pets", json=PET8_TYPE4)
-    assert response.status_code == 201
+#     response = requests.post(f"{BASE_URL_STORE_2}/pet-types/{id_5}/pets", json=PET4_TYPE2)
+#     assert response.status_code == 201
 
 
-def test_08_get_pet_type_by_id():
-    """Test GET /pet-types/{id2} from pet-store #1"""
+# def test_07_post_pets_to_store2_type4():
+#     """Test posting PET7_TYPE4 and PET8_TYPE4 to pet-store #2"""
     
-    id_2 = pet_type_ids["id_2"]
+#     id_6 = pet_type_ids["id_6"]
     
-    response = requests.get(f"{BASE_URL_STORE_1}/pet-types/{id_2}")
-    assert response.status_code == 200
+#     # POST PET7_TYPE4
+#     response = requests.post(f"{BASE_URL_STORE_2}/pet-types/{id_6}/pets", json=PET7_TYPE4)
+#     assert response.status_code == 201
     
-    data = response.json()
-    assert data["type"] == PET_TYPE2_VAL["type"]
-    assert data["family"] == PET_TYPE2_VAL["family"]
-    assert data["genus"] == PET_TYPE2_VAL["genus"]
-    assert data["attributes"] == PET_TYPE2_VAL["attributes"]
-    assert data["lifespan"] == PET_TYPE2_VAL["lifespan"]
+#     # POST PET8_TYPE4
+#     response = requests.post(f"{BASE_URL_STORE_2}/pet-types/{id_6}/pets", json=PET8_TYPE4)
+#     assert response.status_code == 201
 
 
-def test_09_get_pets_for_type():
-    """Test GET /pet-types/{id6}/pets from pet-store #2"""
+# def test_08_get_pet_type_by_id():
+#     """Test GET /pet-types/{id2} from pet-store #1"""
     
-    id_6 = pet_type_ids["id_6"]
+#     id_2 = pet_type_ids["id_2"]
     
-    response = requests.get(f"{BASE_URL_STORE_2}/pet-types/{id_6}/pets")
-    assert response.status_code == 200
-    # assert response.status_code == 404
+#     response = requests.get(f"{BASE_URL_STORE_1}/pet-types/{id_2}")
+#     assert response.status_code == 200
     
-    data = response.json()
-    assert isinstance(data, list)
-    assert len(data) == 2
+#     data = response.json()
+#     assert data["type"] == PET_TYPE2_VAL["type"]
+#     assert data["family"] == PET_TYPE2_VAL["family"]
+#     assert data["genus"] == PET_TYPE2_VAL["genus"]
+#     assert data["attributes"] == PET_TYPE2_VAL["attributes"]
+#     assert data["lifespan"] == PET_TYPE2_VAL["lifespan"]
+
+
+# def test_09_get_pets_for_type():
+#     """Test GET /pet-types/{id6}/pets from pet-store #2"""
     
-    # Verify both pets are present
-    names = [pet["name"] for pet in data]
-    assert "Lazy" in names
-    assert "Lemon" in names
+#     id_6 = pet_type_ids["id_6"]
     
-    # Verify pet details
-    for pet in data:
-        if pet["name"] == "Lazy":
-            assert pet["birthdate"] == PET7_TYPE4["birthdate"]
-        elif pet["name"] == "Lemon":
-            assert pet["birthdate"] == PET8_TYPE4["birthdate"]
+#     response = requests.get(f"{BASE_URL_STORE_2}/pet-types/{id_6}/pets")
+#     assert response.status_code == 200
+#     # assert response.status_code == 404
+    
+#     data = response.json()
+#     assert isinstance(data, list)
+#     assert len(data) == 2
+    
+#     # Verify both pets are present
+#     names = [pet["name"] for pet in data]
+#     assert "Lazy" in names
+#     assert "Lemon" in names
+    
+#     # Verify pet details
+#     for pet in data:
+#         if pet["name"] == "Lazy":
+#             assert pet["birthdate"] == PET7_TYPE4["birthdate"]
+#         elif pet["name"] == "Lemon":
+#             assert pet["birthdate"] == PET8_TYPE4["birthdate"]
 
 # - Tester test file -
 
@@ -534,3 +534,161 @@ def test_09_get_pets_for_type():
 #         assert isinstance(data2, list), "Response should be an array"
 #         # Store 2 should have 3 Canidae types (Golden Retriever, Australian Shepherd, bulldog)
 #         assert len(data2) == 3, f"Expected 3 Canidae types in store 2, got {len(data2)}"
+
+# - tester pytest file for checking query.txt file -
+
+import pytest
+import requests
+import json
+
+# Base URLs for the pet store instances
+PET_STORE_1_URL = "http://localhost:5001"
+PET_STORE_2_URL = "http://localhost:5002"
+PET_ORDER_URL = "http://localhost:5003"
+
+# Pet Type Payloads
+PET_TYPE1 = {
+    "type": "Golden Retriever"
+}
+
+PET_TYPE2 = {
+    "type": "Australian Shepherd"
+}
+
+PET_TYPE3 = {
+    "type": "Abyssinian"
+}
+
+PET_TYPE4 = {
+    "type": "bulldog"
+}
+
+# Pet Payloads
+PET1_TYPE1 = {
+    "name": "Lander",
+    "birthdate": "14-05-2020"
+}
+
+PET2_TYPE1 = {
+    "name": "Lanky"
+}
+
+PET3_TYPE1 = {
+    "name": "Shelly",
+    "birthdate": "07-07-2019"
+}
+
+PET4_TYPE2 = {
+    "name": "Felicity",
+    "birthdate": "27-11-2011"
+}
+
+PET5_TYPE3 = {
+    "name": "Muscles"
+}
+
+PET6_TYPE3 = {
+    "name": "Junior"
+}
+
+PET7_TYPE4 = {
+    "name": "Lazy",
+    "birthdate": "07-08-2018"
+}
+
+PET8_TYPE4 = {
+    "name": "Lemon",
+    "birthdate": "27-03-2020"
+}
+
+# Global variables to store IDs
+pet_type_ids = {}
+
+
+def test_01_post_pet_types_to_store1():
+    """POST 3 pet-types to pet-store #1"""
+    global pet_type_ids
+    
+    # POST PET_TYPE1 to store 1
+    response1 = requests.post(f"{PET_STORE_1_URL}/pet-types", json=PET_TYPE1)
+    data1 = response1.json()
+    pet_type_ids['id_1'] = data1["id"]
+    
+    # POST PET_TYPE2 to store 1
+    response2 = requests.post(f"{PET_STORE_1_URL}/pet-types", json=PET_TYPE2)
+    data2 = response2.json()
+    pet_type_ids['id_2'] = data2["id"]
+    
+    # POST PET_TYPE3 to store 1
+    response3 = requests.post(f"{PET_STORE_1_URL}/pet-types", json=PET_TYPE3)
+    data3 = response3.json()
+    pet_type_ids['id_3'] = data3["id"]
+
+
+def test_02_post_pet_types_to_store2():
+    """POST 3 pet-types to pet-store #2"""
+    global pet_type_ids
+    
+    # POST PET_TYPE1 to store 2
+    response4 = requests.post(f"{PET_STORE_2_URL}/pet-types", json=PET_TYPE1)
+    data4 = response4.json()
+    pet_type_ids['id_4'] = data4["id"]
+    
+    # POST PET_TYPE2 to store 2
+    response5 = requests.post(f"{PET_STORE_2_URL}/pet-types", json=PET_TYPE2)
+    data5 = response5.json()
+    pet_type_ids['id_5'] = data5["id"]
+    
+    # POST PET_TYPE4 to store 2
+    response6 = requests.post(f"{PET_STORE_2_URL}/pet-types", json=PET_TYPE4)
+    data6 = response6.json()
+    pet_type_ids['id_6'] = data6["id"]
+
+
+def test_03_post_pets_to_store1_type1():
+    """POST 2 pets to pet-store #1 pet-type id_1"""
+    id_1 = pet_type_ids['id_1']
+    
+    # POST PET1_TYPE1
+    requests.post(f"{PET_STORE_1_URL}/pet-types/{id_1}/pets", json=PET1_TYPE1)
+    
+    # POST PET2_TYPE1
+    requests.post(f"{PET_STORE_1_URL}/pet-types/{id_1}/pets", json=PET2_TYPE1)
+
+
+def test_04_post_pets_to_store1_type3():
+    """POST 2 pets to pet-store #1 pet-type id_3"""
+    id_3 = pet_type_ids['id_3']
+    
+    # POST PET5_TYPE3
+    requests.post(f"{PET_STORE_1_URL}/pet-types/{id_3}/pets", json=PET5_TYPE3)
+    
+    # POST PET6_TYPE3
+    requests.post(f"{PET_STORE_1_URL}/pet-types/{id_3}/pets", json=PET6_TYPE3)
+
+
+def test_05_post_pet_to_store2_type1():
+    """POST 1 pet to pet-store #2 pet-type id_4"""
+    id_4 = pet_type_ids['id_4']
+    
+    # POST PET3_TYPE1
+    requests.post(f"{PET_STORE_2_URL}/pet-types/{id_4}/pets", json=PET3_TYPE1)
+
+
+def test_06_post_pet_to_store2_type2():
+    """POST 1 pet to pet-store #2 pet-type id_5"""
+    id_5 = pet_type_ids['id_5']
+    
+    # POST PET4_TYPE2
+    requests.post(f"{PET_STORE_2_URL}/pet-types/{id_5}/pets", json=PET4_TYPE2)
+
+
+def test_07_post_pets_to_store2_type4():
+    """POST 2 pets to pet-store #2 pet-type id_6"""
+    id_6 = pet_type_ids['id_6']
+    
+    # POST PET7_TYPE4
+    requests.post(f"{PET_STORE_2_URL}/pet-types/{id_6}/pets", json=PET7_TYPE4)
+    
+    # POST PET8_TYPE4
+    requests.post(f"{PET_STORE_2_URL}/pet-types/{id_6}/pets", json=PET8_TYPE4)
